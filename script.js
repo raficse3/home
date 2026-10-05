@@ -1,85 +1,82 @@
-/* =========================
-   NAVBAR SCROLL EFFECT
-========================= */
+// ========================================
+// SCROLL REVEAL
+// ========================================
 
-const navbar = document.getElementById("navbar");
+const revealElements = document.querySelectorAll(".reveal");
 
-window.addEventListener("scroll", function () {
-
-    if (window.scrollY > 20) {
-        navbar.classList.add("scrolled");
-    } else {
-        navbar.classList.remove("scrolled");
-    }
-
-});
-
-
-/* =========================
-   MOBILE MENU
-========================= */
-
-const menuBtn = document.getElementById("menuBtn");
-
-const navLinks = document.getElementById("navLinks");
-
-
-menuBtn.addEventListener("click", function () {
-
-    navLinks.classList.toggle("active");
-
-});
-
-
-document
-    .querySelectorAll(".nav-links a")
-    .forEach(function (link) {
-
-        link.addEventListener("click", function () {
-
-            navLinks.classList.remove("active");
-
-        });
-
-    });
-
-
-/* =========================
-   SCROLL ANIMATION
-========================= */
-
-const observer = new IntersectionObserver(
-    function (entries) {
-
-        entries.forEach(function (entry) {
+const revealObserver = new IntersectionObserver(
+    (entries) => {
+        entries.forEach((entry) => {
 
             if (entry.isIntersecting) {
-
                 entry.target.classList.add("active");
+                revealObserver.unobserve(entry.target);
 
             }
 
         });
-
     },
     {
-        threshold: 0.15
+        threshold: 0.12
     }
 );
 
+revealElements.forEach((element) => {
+    revealObserver.observe(element);
+});
 
-document
-    .querySelectorAll(".reveal")
-    .forEach(function (element) {
 
-        observer.observe(element);
+// ========================================
+// MOBILE MENU
+// ========================================
 
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.querySelector(".nav-links");
+
+menuBtn.addEventListener("click", () => {
+
+    navLinks.classList.toggle("mobile-active");
+
+});
+
+
+// Close menu after clicking a link
+
+document.querySelectorAll(".nav-links a").forEach((link) => {
+
+    link.addEventListener("click", () => {
+        navLinks.classList.remove("mobile-active");
     });
 
+});
 
-/* =========================
-   CURRENT YEAR
-========================= */
 
-document.getElementById("year").textContent =
-    new Date().getFullYear();
+// ========================================
+// NAVBAR SCROLL EFFECT
+// ========================================
+
+const navbar = document.querySelector(".navbar");
+
+window.addEventListener("scroll", () => {
+
+    if (window.scrollY > 30) {
+        navbar.style.background = "rgba(7,7,7,.92)";
+    } else {
+        navbar.style.background = "rgba(7,7,7,.75)";
+    }
+
+});
+
+
+// ========================================
+// CURRENT YEAR
+// ========================================
+
+const year = new Date().getFullYear();
+
+const copyright = document.querySelector(".copyright");
+
+if (copyright) {
+    copyright.textContent =
+        `© ${year} Arif Shahariar Rafi`;
+}
